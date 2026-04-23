@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revista FADU — Diseño Gráfico</title>
+<link href="https://fonts.cdnfonts.com/css/visby" rel="stylesheet">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap');
+
+  :root {
+    --amarillo: #F5B800;
+    --naranja: #B85F2D;
+    --cafe: #8B4C1E;
+    --guinda: #5F242E;
+    --crema: #FFF5DC;
+    --blanco: #FFFFFF;
+    --negro: #0D0D0D;
+    --gris: #2A2A2A;
+    --rosa: #FF6B6B;
+    --cian: #4ECDC4;
+    --verde: #2D6A4F;
+    --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.15'/%3E%3C/svg%3E");
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Space Grotesk', sans-serif; background: var(--negro); color: var(--crema); overflow-x: hidden; }
+
+  /* ─── PAGES ─── */
+  .page { display: none; min-height: 100vh; position: relative; animation: fadeIn .4s ease; }
+  .page.active { display: block; }
+  #p-inicio.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── NAV ─── */
+  .nav-bar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(13,13,13,.95);
+    backdrop-filter: blur(12px);
+    border-top: 2px solid var(--amarillo);
+    display: flex; justify-content: space-around; align-items: center;
+    padding: 10px 0 14px; z-index: 1000;
+  }
+  .nav-btn {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 4px; cursor: pointer; color: #666;
+    font-size: 10px; font-weight: 600; letter-spacing: .05em;
+    text-transform: uppercase; transition: color .2s, transform .2s;
+    border: none; background: none; padding: 4px 10px;
+  }
+  .nav-btn svg { width: 22px; height: 22px; stroke-width: 2; }
+  .nav-btn.active, .nav-btn:hover { color: var(--amarillo); transform: translateY(-2px); }
+  .nav-btn span { font-family: 'DM Mono', monospace; }
+
+  /* Indicador visual: punto bajo iconos de scroll interno */
+  .nav-btn[data-type="scroll"]::after {
+    content: ''; display: block; width: 4px; height: 4px;
+    border-radius: 50%; background: var(--amarillo);
+    opacity: 0; margin: 0 auto; transition: opacity .2s;
+  }
+  .nav-btn[data-type="scroll"].active::after,
+  .nav-btn[data-type="scroll"]:hover::after { opacity: 1; }
+
+  /* ─── PREV/NEXT ─── */
+  .page-nav { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px 90px; }
+  .pn-btn {
+    background: var(--amarillo); color: var(--negro); border: none; cursor: pointer;
+    font-family: 'DM Mono', monospace; font-weight: 700; font-size: 12px;
+    padding: 10px 20px; letter-spacing: .08em; text-transform: uppercase;
+    transition: background .2s, transform .15s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .pn-btn:hover { background: var(--naranja); transform: scale(1.04); }
+  .pn-btn:disabled { opacity: .3; cursor: default; }
+  .page-indicator { font-family: 'DM Mono', monospace; font-size: 11px; color: #666; letter-spacing: .1em; }
+
+  /* ─── DECORATIVE ─── */
+  .grain-overlay { position: absolute; inset: 0; background-image: var(--grain); pointer-events: none; z-index: 1; opacity: .4; }
+  .accent-line { width: 60px; height: 3px; background: var(--amarillo); margin: 12px 0; }
+  .tag {
+    display: inline-block; background: var(--amarillo); color: var(--negro);
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 700;
+    padding: 3px 10px; letter-spacing: .12em; text-transform: uppercase;
+  }
+
+  /* ═══════════════════════════
+     PAGE 1 — INICIO (Banner + Editorial unificados)
+  ═══════════════════════════ */
+  #p-inicio { background: var(--negro); overflow: hidden; }
+
+  /* Banner principal */
+  #banner-inicio {
+    background: var(--amarillo); min-height: 100vh;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+  .portada-img { width: 100%; height: 100vh; object-fit: cover; position: absolute; inset: 0; z-index: 0; }
+  .portada-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(13,13,13,.7) 100%); z-index: 2; }
+  .portada-content { position: relative; z-index: 3; display: flex; flex-direction: column; justify-content: flex-end; min-height: 100vh; padding: 0 28px 90px; }
+  .portada-tag { font-family: 'Visby', monospace; font-size: 11px; letter-spacing: .18em; color: var(--amarillo); text-transform: uppercase; margin-bottom: 10px; border-left: 3px solid var(--amarillo); padding-left: 12px; }
+  .portada-title { font-size: clamp(42px, 10vw, 72px); font-weight: 700; line-height: .92; color: var(--blanco); text-shadow: 2px 2px 0 var(--negro); margin-bottom: 16px; }
+  .portada-title span { color: var(--amarillo); }
+  .portada-subtitle { font-family: '', monospace; font-size: 13px; color: rgba(255,255,255,.75); letter-spacing: .06em; margin-bottom: 28px; }
+  .portada-enter {
+    display: inline-block; background: var(--amarillo); color: var(--negro);
+    font-weight: 800; font-size: 15px; padding: 14px 32px; cursor: pointer; border: none;
+    clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+    transition: transform .2s, background .2s; letter-spacing: .06em;
+  }
+  .portada-enter:hover { background: var(--naranja); transform: scale(1.03); }
+
+  /* Sección Editorial (dentro de #p-inicio) */
+  #seccion-editorial { background: var(--crema); color: var(--negro); }
+  .editorial-header { background: var(--negro); padding: 24px 28px 20px; border-bottom: 4px solid var(--amarillo); }
+  .editorial-header .tag { margin-bottom: 8px; }
+  .editorial-header h1 { font-size: 36px; font-weight: 700; color: var(--crema); line-height: 1; }
+  .editorial-header h1 span { color: var(--amarillo); }
+  .editorial-img {
+     width: 400px;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  }
+   .editorial-img3 {
+     width: 100%;
+  height: 380px;
+  object-fit: cover;
+  display: block;
+  }
+  .editorial-img2 { width: 400px; height: 380px; object-fit: cover; display: block;  margin: 0 auto; }
+  .editorial-body { padding: 24px 28px; }
+  .editorial-body p { font-size: 15px; line-height: 1.7; margin-bottom: 16px; color: var(--gris); }
+  .editorial-body p:last-child { margin-bottom: 0; }
+  /* Caption / descripción de medios embebidos */
+  .media-caption {
+    display: block;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.65;
+    color: var(--negro);
+    background: var(--amarillo);
+    border-left: 5px solid var(--naranja);
+    padding: 14px 18px;
+    margin: 18px 0 12px;
+    letter-spacing: .01em;
+  }
+
+  .editorial-signature { margin-top: 24px; padding-top: 20px; border-top: 2px solid var(--amarillo); display: flex; align-items: center; gap: 14px; }
+  .sig-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--amarillo); display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 18px; color: var(--negro); flex-shrink: 0; }
+  .sig-name { font-weight: 700; font-size: 15px; color: var(--negro); }
+  .sig-role { font-family: 'DM Mono', monospace; font-size: 11px; color: #888; letter-spacing: .08em; }
+  .editorial-nav { background: var(--crema); padding: 16px 24px 90px; display: flex; justify-content: flex-end; }
+  .instagram-media {
+  max-width: 380px !important;
+  width: 100% !important;
+  margin: 20px auto !important;
+  border-radius: 0 !important;
+}
+.instagram-media {
+  background: #0a0a0a !important;
+  border: 1px solid var(--cian) !important;
+  box-shadow: 0 0 0 1px rgba(78,205,196,0.2),
+              0 10px 30px rgba(0,0,0,0.6) !important;
+}
+
+/* quitar bordes redondeados feos */
+.instagram-media * {
+  border-radius: 0 !important;
+}
+.instagram-media {
+  transition: all 0.3s ease;
+}
+
+.instagram-media:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 0 1px var(--cian),
+              0 20px 40px rgba(0,0,0,0.8);
+}
+
+  /* ═══════════════════════════
+     PAGE 2 — INTERCAMBIOS
+  ═══════════════════════════ */
+  #p-intercambios { background: var(--negro); }
+  .int-header { background: linear-gradient(135deg, #5F242E 0%, #5F242E 100%); padding: 24px 28px 20px; border-bottom: 4px solid var(--naranja); position: relative; overflow: hidden; }
+  .int-header::before { content: '✈'; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); font-size: 80px; opacity: .08; }
+  .int-header .tag { background: var(--naranja); color: var(--negro); margin-bottom: 8px; }
+  .int-header h1 { font-size: 32px; font-weight: 700; color: var(--crema); line-height: 1.1; }
+  .int-header h1 span { color: var(--naranja); }
+  .int-header p { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 8px; }
+  .int-grid { padding: 20px 20px 0; display: flex; flex-direction: column; gap: 16px; }
+  .int-card { background: var(--gris); border-radius: 2px; overflow: hidden; border-left: 4px solid var(--naranja); display: flex; }
+  .int-flag { width: 80px; min-height: 100px; object-fit: cover; flex-shrink: 0; }
+  .int-info { padding: 14px 16px; }
+  .int-country { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em; color: var(--naranja); text-transform: uppercase; margin-bottom: 4px; }
+  .int-info h3 { font-size: 16px; font-weight: 700; color: var(--crema); margin-bottom: 6px; }
+  .int-info p { font-size: 12px; color: #aaa; line-height: 1.5; }
+  .int-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .int-tag { font-family: 'DM Mono', monospace; font-size: 9px; padding: 2px 8px; background: rgba(78,205,196,.15); border: 1px solid var(--amarillo); color: var(--cian); letter-spacing: .06em; }
+  .int-tip { margin: 20px 20px 0; background: rgba(78,205,196,.08); border: 1px dashed var(--naranja); padding: 16px; }
+  .int-tip h4 { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: .1em; color: var(--naranja); text-transform: uppercase; margin-bottom: 8px; }
+  .int-tip p { font-size: 13px; color: #bbb; line-height: 1.6; }
+  .int-btn {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: .08em;
+  color: var(--amarillo);
+  border: 1px solid var(--amarillo);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.int-btn:hover {
+  background: var(--amarillo);
+  color: var(--negro);
+}
+
+  /* ═══════════════════════════
+     PAGE 3 — ¿SABÍAS?
+  ═══════════════════════════ */
+  #p-sabias { background: var(--negro); }
+  .sabias-header { background: linear-gradient(135deg, #D4597A 0%, #D4597A 100%); padding: 24px 28px 20px; border-bottom: 4px solid var(--naranja); }
+  .sabias-header .tag { background: var(--amarillo); margin-bottom: 8px; }
+  .sabias-header h1 { font-size: 30px; font-weight: 700; color: var(--crema); line-height: 1.1; }
+  .sabias-header h1 span { color: var(--amarillo); }
+  .sabias-header p { font-size: 13px; color: rgba(255,245,220,.7); margin-top: 8px; }
+  .sabias-list { padding: 20px 20px 0; display: flex; flex-direction: column; gap: 0; }
+  .sabias-item { border-bottom: 1px solid #333; padding: 18px 0; display: flex; gap: 16px; align-items: flex-start; }
+  .sabias-num { font-family: 'DM Mono', monospace; font-size: 28px; font-weight: 700; color: var(--naranja); opacity: .4; line-height: 1; flex-shrink: 0; width: 36px; }
+  .sabias-text h3 { font-size: 16px; font-weight: 700; color: var(--crema); margin-bottom: 6px; }
+  .sabias-text p { font-size: 13px; color: #aaa; line-height: 1.6; }
+  .sabias-text em { color: var(--naranja); font-style: normal; font-weight: 600; }
+
+  /* ═══════════════════════════
+     PAGE 4 — TRIVIA
+  ═══════════════════════════ */
+  #p-trivia { background: var(--negro); }
+  .trivia-header { background: linear-gradient(135deg, #556E6D 0%, #556E6D 100%); padding: 24px 28px 20px; border-bottom: 4px solid var(--rosa); }
+  .trivia-header .tag { background: var(--rosa); margin-bottom: 8px; }
+  .trivia-header h1 { font-size: 30px; font-weight: 700; color: var(--crema); line-height: 1.1; }
+  .trivia-header h1 span { color: var(--amarillo); }
+  .trivia-header p { font-size: 13px; color: rgba(255,255,255,.6); margin-top: 8px; }
+  .trivia-body { padding: 20px; }
+  .trivia-progress { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tp-dot { width: 10px; height: 10px; border-radius: 50%; background: #333; border: 2px solid #555; transition: all .3s; }
+  .tp-dot.done { background: var(--amarillo); border-color: var(--amarillo); }
+  .trivia-card { background: var(--gris); padding: 20px; border-top: 3px solid var(--rosa); margin-bottom: 16px; }
+  .q-num { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: .12em; color: var(--rosa); margin-bottom: 10px; }
+  #q-text { font-size: 17px; font-weight: 600; line-height: 1.4; color: var(--crema); }
+  .q-opts { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .q-opt { background: #1a1a1a; border: 1px solid #444; color: var(--crema); padding: 12px 16px; text-align: left; cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 14px; transition: all .2s; }
+  .q-opt:hover:not(:disabled) { border-color: var(--amarillo); color: var(--amarillo); }
+  .q-opt.correct { background: rgba(45,106,79,.3); border-color: #2D6A4F; color: #5fca9e; }
+  .q-opt.wrong { background: rgba(255,107,107,.15); border-color: var(--amarillo); color: var(--rosa); }
+  .q-feedback { font-size: 13px; color: #bbb; line-height: 1.6; padding: 12px; background: rgba(255,255,255,.04); border-left: 3px solid var(--rosa); display: none; }
+  .q-feedback.visible { display: block; }
+  .q-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .score-display { font-family: 'DM Mono', monospace; font-size: 13px; color: var(--rosa); letter-spacing: .08em; }
+
+  /* ═══════════════════════════
+     PAGE 5 — CAMPUS / GALERÍA
+  ═══════════════════════════ */
+  #p-galeria { background: var(--negro); }
+  .galeria-header { background: linear-gradient(135deg, var(--verde) 0%, #1b4332 100%); padding: 24px 28px 20px; border-bottom: 4px solid #52b788; }
+  .galeria-header .tag { background: #52b788; color: var(--negro); margin-bottom: 8px; }
+  .galeria-header h1 { font-size: 30px; font-weight: 700; color: var(--crema); line-height: 1.1; }
+  .galeria-header h1 span { color: #52b788; }
+  .galeria-header p { font-size: 13px; color: rgba(255,245,220,.7); margin-top: 8px; }
+  .galeria-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; padding: 3px; }
+  .galeria-item { position: relative; overflow: hidden; aspect-ratio: 1; cursor: pointer; background: var(--gris); }
+  .galeria-item img { width: 100%; height: 100%; object-fit: cover; transition: transform .3s; }
+  .galeria-item:hover img { transform: scale(1.05); }
+  .galeria-item .gi-label { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,.8)); padding: 20px 10px 8px; font-size: 11px; color: rgba(255,255,255,.85); font-family: 'DM Mono', monospace; transform: translateY(100%); transition: transform .3s; }
+  .galeria-item:hover .gi-label { transform: translateY(0); }
+  .campus-desc { padding: 24px 28px 0; color: var(--crema); }
+  .campus-desc h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .campus-desc p { font-size: 14px; color: #bbb; line-height: 1.7; margin-bottom: 12px; }
+
+  /* ─── LIGHTBOX ─── */
+  .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.93); z-index: 2000; align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 92vw; max-height: 80vh; object-fit: contain; }
+  .lb-close { position: absolute; top: 20px; right: 20px; color: var(--crema); font-size: 30px; cursor: pointer; line-height: 1; }
+
+  .bottom-pad { padding-bottom: 90px; }
+
+  /* contenedor del gato flotante */
+.float-img-container {
+  position: fixed;
+  /* Se posiciona justo encima del nav (nav tiene ~70px de alto) pero debajo de él en z-index */
+  bottom: 56px; /* queda pegado al nav por abajo */
+  right: -90px; /* escondido casi completo */
+  z-index: 999; /* debajo del nav que es z-index: 1000 */
+  cursor: grab;
+  transition: right .4s ease, bottom .4s ease;
+  user-select: none;
+  touch-action: none;
+}
+
+/* un poco visible al hacer hover */
+.float-img-container:hover {
+  right: -50px;
+}
+
+/* cuando se está arrastrando */
+.float-img-container.dragging {
+  cursor: grabbing;
+  transition: none; /* sin transición mientras se arrastra */
+  z-index: 998; /* sigue debajo del nav */
+}
+
+/* imagen del gato */
+.float-img {
+  width: 150px;
+  height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.6));
+  pointer-events: none; /* el drag lo maneja el contenedor */
+  display: block;
+}
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="document.getElementById('lightbox').classList.remove('open')">
+  <span class="lb-close">✕</span>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<!-- ═══════════════════════
+     INICIO: Banner + Editorial unificados
+════════════════════════ -->
+<div class="page active" id="p-inicio">
+
+  <!-- Banner principal — id para scroll desde nav -->
+  <section id="banner-inicio">
+    <img class="portada-img"
+      src="lib/PROPUESTA_202-10.png"
+      alt="Portada Revista FADU">
+    <div class="portada-overlay"></div>
+    <div class="portada-content">
+      <p class="portada-tag">FADU · UAT · 2025</p>
+      <h1 class="portada-title">REVISTA<br><span>FADU</span></h1>
+      <p class="portada-subtitle">Diseño Gráfico — Edición Especial</p>
+      <button class="portada-enter" onclick="scrollToEditorial()">LEER EDITORIAL ↓</button>
+    </div>
+  </section>
+
+  <!-- Sección Editorial — dentro de la misma página -->
+  <section id="seccion-editorial">
+    <div class="editorial-header">
+      <span class="tag">Editorial</span>
+      <h1>Diseñar es <span>comunicar</span></h1>
+    </div>
+    <img class="editorial-img"
+      src="lib/BIENVENIDA.png"
+      alt="Editorial">
+    <div class="editorial-body">
+      <p>Bienvenidos a esta edición especial de la Revista FADU, un espacio donde el diseño gráfico cobra vida a través de las voces y creaciones de nuestra comunidad universitaria.</p>
+      <p>En cada página encontrarán una muestra de la diversidad y riqueza creativa que caracteriza a nuestra facultad. Desde proyectos de intercambio internacional hasta curiosidades del mundo del diseño, este número refleja la esencia de lo que hacemos y por qué lo hacemos.</p>
+      <p>El diseño no es sólo estética: es pensamiento, estrategia y comunicación. Es transformar ideas en experiencias visuales que conectan, informan y emocionan. Eso es lo que ustedes, estudiantes de la FADU-UAT, hacen cada día.</p>
+      <p></p>
+      <img class="editorial-img2" src="lib/580677244_18306893143301701_4569861431558265816_n.jpg"><br>
+      <p class="media-caption">¡No te pierdas esta oportunidad de vivir Colombia desde tu experiencia de intercambio en la USTA Bucaramanga!</p>
+      <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DPmpva2jcpc/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DPmpva2jcpc/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">Ver esta publicación en Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DPmpva2jcpc/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">Una publicación compartida por DRI USTABUCA (@dri_ustabuca)</a></p></div></blockquote>
+<script async src="//www.instagram.com/embed.js"></script>
+<p class="media-caption">
+  El mejor verano universitario!! No se lo pueden perder!!🌟
+</p>
+<blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/reel/DOMruPPiZ81/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:540px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:16px;"> <a href="https://www.instagram.com/reel/DOMruPPiZ81/?utm_source=ig_embed&amp;utm_campaign=loading" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank"> <div style=" display: flex; flex-direction: row; align-items: center;"> <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div></div></div><div style="padding: 19% 0;"></div> <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="https://www.w3.org/2000/svg" xmlns:xlink="https://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M556.869,30.41 C554.814,30.41 553.148,32.076 553.148,34.131 C553.148,36.186 554.814,37.852 556.869,37.852 C558.924,37.852 560.59,36.186 560.59,34.131 C560.59,32.076 558.924,30.41 556.869,30.41 M541,60.657 C535.114,60.657 530.342,55.887 530.342,50 C530.342,44.114 535.114,39.342 541,39.342 C546.887,39.342 551.658,44.114 551.658,50 C551.658,55.887 546.887,60.657 541,60.657 M541,33.886 C532.1,33.886 524.886,41.1 524.886,50 C524.886,58.899 532.1,66.113 541,66.113 C549.9,66.113 557.115,58.899 557.115,50 C557.115,41.1 549.9,33.886 541,33.886 M565.378,62.101 C565.244,65.022 564.756,66.606 564.346,67.663 C563.803,69.06 563.154,70.057 562.106,71.106 C561.058,72.155 560.06,72.803 558.662,73.347 C557.607,73.757 556.021,74.244 553.102,74.378 C549.944,74.521 548.997,74.552 541,74.552 C533.003,74.552 532.056,74.521 528.898,74.378 C525.979,74.244 524.393,73.757 523.338,73.347 C521.94,72.803 520.942,72.155 519.894,71.106 C518.846,70.057 518.197,69.06 517.654,67.663 C517.244,66.606 516.755,65.022 516.623,62.101 C516.479,58.943 516.448,57.996 516.448,50 C516.448,42.003 516.479,41.056 516.623,37.899 C516.755,34.978 517.244,33.391 517.654,32.338 C518.197,30.938 518.846,29.942 519.894,28.894 C520.942,27.846 521.94,27.196 523.338,26.654 C524.393,26.244 525.979,25.756 528.898,25.623 C532.057,25.479 533.004,25.448 541,25.448 C548.997,25.448 549.943,25.479 553.102,25.623 C556.021,25.756 557.607,26.244 558.662,26.654 C560.06,27.196 561.058,27.846 562.106,28.894 C563.154,29.942 563.803,30.938 564.346,32.338 C564.756,33.391 565.244,34.978 565.378,37.899 C565.522,41.056 565.552,42.003 565.552,50 C565.552,57.996 565.522,58.943 565.378,62.101 M570.82,37.631 C570.674,34.438 570.167,32.258 569.425,30.349 C568.659,28.377 567.633,26.702 565.965,25.035 C564.297,23.368 562.623,22.342 560.652,21.575 C558.743,20.834 556.562,20.326 553.369,20.18 C550.169,20.033 549.148,20 541,20 C532.853,20 531.831,20.033 528.631,20.18 C525.438,20.326 523.257,20.834 521.349,21.575 C519.376,22.342 517.703,23.368 516.035,25.035 C514.368,26.702 513.342,28.377 512.574,30.349 C511.834,32.258 511.326,34.438 511.181,37.631 C511.035,40.831 511,41.851 511,50 C511,58.147 511.035,59.17 511.181,62.369 C511.326,65.562 511.834,67.743 512.574,69.651 C513.342,71.625 514.368,73.296 516.035,74.965 C517.703,76.634 519.376,77.658 521.349,78.425 C523.257,79.167 525.438,79.673 528.631,79.82 C531.831,79.965 532.853,80.001 541,80.001 C549.148,80.001 550.169,79.965 553.369,79.82 C556.562,79.673 558.743,79.167 560.652,78.425 C562.623,77.658 564.297,76.634 565.965,74.965 C567.633,73.296 568.659,71.625 569.425,69.651 C570.167,67.743 570.674,65.562 570.82,62.369 C570.966,59.17 571,58.147 571,50 C571,41.851 570.966,40.831 570.82,37.631"></path></g></g></g></svg></div><div style="padding-top: 8px;"> <div style=" color:#3897f0; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:550; line-height:18px;">Ver esta publicación en Instagram</div></div><div style="padding: 12.5% 0;"></div> <div style="display: flex; flex-direction: row; margin-bottom: 14px; align-items: center;"><div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(0px) translateY(7px);"></div> <div style="background-color: #F4F4F4; height: 12.5px; transform: rotate(-45deg) translateX(3px) translateY(1px); width: 12.5px; flex-grow: 0; margin-right: 14px; margin-left: 2px;"></div> <div style="background-color: #F4F4F4; border-radius: 50%; height: 12.5px; width: 12.5px; transform: translateX(9px) translateY(-18px);"></div></div><div style="margin-left: 8px;"> <div style=" background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 20px; width: 20px;"></div> <div style=" width: 0; height: 0; border-top: 2px solid transparent; border-left: 6px solid #f4f4f4; border-bottom: 2px solid transparent; transform: translateX(16px) translateY(-4px) rotate(30deg)"></div></div><div style="margin-left: auto;"> <div style=" width: 0px; border-top: 8px solid #F4F4F4; border-right: 8px solid transparent; transform: translateY(16px);"></div> <div style=" background-color: #F4F4F4; flex-grow: 0; height: 12px; width: 16px; transform: translateY(-4px);"></div> <div style=" width: 0; height: 0; border-top: 8px solid #F4F4F4; border-left: 8px solid transparent; transform: translateY(-4px) translateX(8px);"></div></div></div> <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center; margin-bottom: 24px;"> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 224px;"></div> <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 144px;"></div></div></a><p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;"><a href="https://www.instagram.com/reel/DOMruPPiZ81/?utm_source=ig_embed&amp;utm_campaign=loading" style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none;" target="_blank">Una publicación compartida por Miri (Mickey&#39;s Version) (@miri.mickeysversion)</a></p></div></blockquote>
+<script async src="//www.instagram.com/embed.js"></script>
+      <div class="editorial-signature">
+        <div class="sig-avatar">E</div>
+        <div>
+          <div>
+            <img src="lib/LOGO_FADU.png" style="height: 20px;">
+          </div>
+          <div class="sig-name">Editorial Fadu</div>
+          <div class="sig-role">Diseño Gráfico · UAT · 2025</div>
+        </div>
+      </div>
+    </div>
+    <div class="editorial-nav">
+      <button class="pn-btn" onclick="goPage('p-intercambios')">Siguiente →</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- ═══════════════════════
+     INTERCAMBIOS
+════════════════════════ -->
+<div class="page" id="p-intercambios">
+  <div class="int-header">
+    <span class="tag">Internacional</span>
+    <h1>Intercambios<br><span>Académicos</span></h1>
+    <p>Experiencias de estudiantes FADU en el mundo</p>
+  </div>
+  <img class="editorial-img3"
+      src="lib/ChatGPT Image 22 mar 2026, 11_11_33 p.m..png"
+      alt="Editorial">
+    <div class="int-grid">
+    <div class="int-card">
+      <img class="int-flag" src="lib/80_Ibero.jpg" alt="España">
+      <div class="int-info">
+        <p class="int-country">MX Ciudad de México</p>
+        <h3>IBERO</h3>
+        <p>La Universidad Iberoamericana (IBERO) es una de las instituciones de educación superior privada más prestigiosas y antiguas de México, con una identidad profundamente marcada por la Compañía de Jesús (Jesuitas).</p>
+        <a href="https://www.facebook.com/photo?fbid=1534916955307080&set=pcb.1534917141973728" class="int-btn">Ver más</a>
+        <div class="int-tags"><span class="int-tag">Fecha Limite: 1 de Junio</span></div>
+      </div>
+    </div>
+    <div class="int-card">
+      <img class="int-flag" src="lib/images (3).jpeg" alt="Japón">
+      <div class="int-info">
+        <p class="int-country">MX Sonora</p>
+        <h3>ITSON University</h3>
+        <p>El Instituto Tecnológico de Sonora (ITSON) es una universidad pública autónoma con sede principal en Ciudad Obregón, Sonora. Es reconocida como una de las instituciones educativas más importantes del noroeste de México.</p>
+        <a href="https://www.facebook.com/photo?fbid=1534917018640407&set=pcb.1534917141973728" class="int-btn">Ver más</a>
+        <div class="int-tags"><span class="int-tag">Fecha Limite: 29 de Mayo</span></div>
+      </div>
+    </div>
+    <div class="int-card">
+      <img class="int-flag" src="lib/UADEC.jpeg" alt="Argentina">
+      <div class="int-info">
+        <p class="int-country">MX Coahuila</p>
+        <h3>UAdeC</h3>
+        <p>La Universidad Autónoma de Coahuila (UAdeC) es la institución pública de educación superior más importante del estado de Coahuila. Se distingue por su estructura descentralizada y su fuerte arraigo en las distintas regiones de la entidad.</p>
+        <a href="https://www.facebook.com/photo?fbid=1534917048640404&set=pcb.1534917141973728" class="int-btn">Ver más</a>
+        <div class="int-tags"><span class="int-tag">Fecha Limite: 22 de Mayo</span></div>
+      </div>
+    </div>
+    <div class="int-card">
+      <img class="int-flag" src="lib/UANL.jpeg" alt="Argentina">
+      <div class="int-info">
+        <p class="int-country">MX Nuevo León</p>
+        <h3>UANL</h3>
+        <p>La Universidad Autónoma de Nuevo León (UANL) es la institución de educación superior más grande e importante del norte de México y la tercera universidad más grande del país. Con sede principal en la zona metropolitana de Monterrey, es un pilar fundamental para el desarrollo industrial y científico de la región.</p>
+        <a href="https://www.facebook.com/photo?fbid=1534917085307067&set=pcb.1534917141973728" class="int-btn">Ver más</a>
+        <div class="int-tags"><span class="int-tag">Fecha Limite: 10 de Julio</span></div>
+      </div>
+    </div>
+    <div class="int-card">
+      <img class="int-flag" src="lib/UAQ-2-1160x700-1.jpg" alt="Argentina">
+      <div class="int-info">
+        <p class="int-country">MX Querétaro</p>
+        <h3>UAQ</h3>
+        <p>La Universidad Autónoma de Nuevo León (UANL) es la institución de educación superior más grande e importante del norte de México y la tercera universidad más grande del país. Con sede principal en la zona metropolitana de Monterrey, es un pilar fundamental para el desarrollo industrial y científico de la región.</p>
+        <a href="https://www.facebook.com/photo?fbid=1534917115307064&set=pcb.1534917141973728" class="int-btn">Ver más</a>
+        <div class="int-tags"><span class="int-tag">Fecha Limite: 31 de Marzo</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="int-tip">
+    <h4>💡 ¿Cómo aplicar?</h4>
+    <p>Los intercambios se gestionan a través de la Coordinación Internacional de la UAT. Se requiere promedio mínimo de 8.5, carta de motivación y nivel básico del idioma del país destino.
+      <br>También atraves de las redes sociales de la Dirección de Relaciones Regionales e Internacionales
+    </p>
+  </div>
+  <div class="page-nav bottom-pad">
+    <button class="pn-btn" onclick="goPage('p-inicio')">← Anterior</button>
+    <span class="page-indicator">2 / 5</span>
+    <button class="pn-btn" onclick="goPage('p-sabias')">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════
+     ¿SABÍAS?
+════════════════════════ -->
+<div class="page" id="p-sabias">
+  <div class="sabias-header">
+    <span class="tag">Curiosidades</span>
+    <h1>¿<span>Sabías</span><br>que…?</h1>
+    <p>Datos curiosos del mundo del diseño gráfico</p>
+  </div>
+  <div class="sabias-list">
+    <div class="sabias-item">
+      <span class="sabias-num">01</span>
+      <div class="sabias-text">
+        <h3>El color rojo acelera el pulso</h3>
+        <p>El rojo no sólo llama la atención, sino que <em>fisiológicamente</em> aumenta la frecuencia cardíaca. Por eso los botones de "comprar" suelen ser rojos.</p>
+      </div>
+    </div>
+    <div class="sabias-item">
+      <span class="sabias-num">02</span>
+      <div class="sabias-text">
+        <h3>El 90% de las decisiones son visuales</h3>
+        <p>El <em>90% de la información</em> que el cerebro procesa es visual, y tardamos sólo 13 milisegundos en procesar una imagen.</p>
+      </div>
+    </div>
+    <div class="sabias-item">
+      <span class="sabias-num">03</span>
+      <div class="sabias-text">
+        <h3>Comic Sans fue salvavidas</h3>
+        <p>Diseñada por <em>Vincent Connare</em> en 1994. Se ha usado en señales hospitalarias por su alta legibilidad a pesar de su mala reputación.</p>
+      </div>
+    </div>
+    <div class="sabias-item">
+      <span class="sabias-num">04</span>
+      <div class="sabias-text">
+        <h3>El espacio negativo es diseño</h3>
+        <p>El logo de <em>FedEx</em> contiene una flecha oculta entre la E y la X. Fue elegida una de las mejores identidades del siglo XX.</p>
+      </div>
+    </div>
+    <div class="sabias-item">
+      <span class="sabias-num">05</span>
+      <div class="sabias-text">
+        <h3>La Bauhaus cambió todo</h3>
+        <p>La escuela alemana Bauhaus (1919–1933) estableció los fundamentos del <em>diseño moderno</em>. Duró sólo 14 años pero su influencia es eterna.</p>
+      </div>
+    </div>
+  </div>
+  <div class="page-nav bottom-pad">
+    <button class="pn-btn" onclick="goPage('p-intercambios')">← Anterior</button>
+    <span class="page-indicator">3 / 5</span>
+    <button class="pn-btn" onclick="goPage('p-trivia')">Siguiente →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════
+     TRIVIA
+════════════════════════ -->
+<div class="page" id="p-trivia">
+  <div class="trivia-header">
+    <span class="tag">Trivia</span>
+    <h1>¿Cuánto sabes de<br><span>Diseño?</span></h1>
+    <p>8 preguntas para poner a prueba tu conocimiento</p>
+  </div>
+  <div class="trivia-body">
+    <div class="trivia-progress" id="trivia-progress"></div>
+    <div class="trivia-card">
+      <p class="q-num" id="q-num">PREGUNTA 1 / 8</p>
+      <p id="q-text"></p>
+      <div class="q-opts" id="q-opts"></div>
+      <p class="q-feedback" id="q-feedback"></p>
+    </div>
+    <div class="q-controls">
+      <button class="pn-btn" id="prev-q" onclick="prevQ()">← Anterior</button>
+      <span class="score-display">✦ <span id="score-display">0 / 0</span></span>
+      <button class="pn-btn" id="next-q" onclick="nextQ()">Siguiente →</button>
+    </div>
+  </div>
+  <div class="page-nav bottom-pad">
+    <button class="pn-btn" onclick="goPage('p-sabias')">← Anterior</button>
+    <span class="page-indicator">4 / 5</span>
+    <button class="pn-btn" onclick="goPage('p-galeria')">Siguiente →</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════
+     CAMPUS / GALERÍA
+════════════════════════ -->
+<div class="page" id="p-galeria">
+  <div class="galeria-header">
+    <span class="tag">Campus</span>
+    <h1>FADU<br><span>Tampico</span></h1>
+    <p>El espacio donde nace la creatividad</p>
+  </div>
+  <div class="galeria-grid">
+    <div class="galeria-item" onclick="openLB('lib/575602488_18306893254301701_3244914530691533217_n.jpg')">
+      <img src="lib/575602488_18306893254301701_3244914530691533217_n.jpg" alt="Campus 1">
+      <span class="gi-label">Edificio principal</span>
+    </div>
+    <div class="galeria-item" onclick="openLB('lib/352355.jpeg')">
+      <img src="lib/352355.jpeg" alt="Campus 2">
+      <span class="gi-label">Mision XXI</span>
+    </div>
+    <div class="galeria-item" onclick="openLB('lib/669886278_18327049813301701_3792342520787495085_n.jpg')">
+      <img src="lib/669886278_18327049813301701_3792342520787495085_n.jpg" alt="Campus 3">
+      <span class="gi-label">Biblioteca FADU</span>
+    </div>
+    <div class="galeria-item" onclick="openLB('lib/670875143_18327049777301701_7988878980149972366_n.jpg')">
+      <img src="lib/670875143_18327049777301701_7988878980149972366_n.jpg" alt="Campus 4">
+      <span class="gi-label">Edificio M</span>
+    </div>
+    <div class="galeria-item" onclick="openLB('lib/670788473_18327049726301701_3415920735254945615_n.jpg')">
+      <img src="lib/670788473_18327049726301701_3415920735254945615_n.jpg" alt="Campus 4">
+      <span class="gi-label">Canchas</span>
+    </div>
+    <div class="galeria-item" onclick="openLB('lib/669755026_18327049804301701_7336582759164234346_n.jpg')">
+      <img src="lib/669755026_18327049804301701_7336582759164234346_n.jpg" alt="Campus 4">
+      <span class="gi-label">Edificio C</span>
+    </div>
+  </div>
+  <div class="campus-desc">
+    <span class="tag">Facultad de Arquitectura, Diseño y Urbanismo</span>
+    <h3 style="margin-top:16px;">Un campus vivo</h3>
+    <p>El campus de la FADU-UAT en Tampico es un espacio donde el diseño no es sólo una materia: <strong>es el ambiente</strong>. Desde la escultura del Hombre de Vitruvio en la entrada hasta los murales en los corredores, cada rincón inspira creatividad.</p>
+    <p>El Centro Cultural <strong>Misión XXI</strong> es uno de los espacios más emblemáticos, sede de exposiciones, eventos culturales y actividades académicas de la facultad.</p>
+    <p>Hasta los gatos del campus se han convertido en parte de la identidad de la FADU — siempre presentes, siempre creativos. 🐱</p><br>
+    <br><p>¡Ahora que haz visto mi prototipo! me puedes ayudar a recibir q-feedback
+      asi que:
+    </p>
+    <a href="https://forms.gle/8eG2EM4HWeFJmiCH6" class="int-btn">¡Dame tu Opinión!</a>
+  </div>
+  <div class="page-nav bottom-pad">
+    <button class="pn-btn" onclick="goPage('p-trivia')">← Anterior</button>
+    <span class="page-indicator">5 / 5</span>
+    <button class="pn-btn" onclick="scrollToInicio()">↺ Volver al inicio</button>
+  </div>
+</div>
+<div class="float-img-container" id="floatImg">
+  <img src="lib/Píxel.png" alt="extra" class="float-img">
+</div>
+
+<!-- ═══════════════════════════════════════════
+     BOTTOM NAV
+     ─────────────────────────────────────────
+     data-type="scroll"  → enlace interno (scroll)
+                           Indicador visual: punto amarillo bajo el icono
+     data-type="page"    → página independiente
+═══════════════════════════════════════════ -->
+<nav class="nav-bar" aria-label="Navegación principal">
+
+  <!-- Inicio → scroll hacia #banner-inicio (enlace interno) -->
+  <button class="nav-btn active" id="nav-inicio"
+          data-type="scroll"
+          onclick="goInicio()"
+          title="Ir al inicio — scroll interno">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+      <polyline points="9 22 9 12 15 12 15 22"/>
+    </svg>
+    <span>Inicio</span>
+  </button>
+
+  <!-- Editorial → scroll hacia #seccion-editorial (enlace interno) -->
+  <button class="nav-btn" id="nav-editorial"
+          data-type="scroll"
+          onclick="goEditorial()"
+          title="Ir a Editorial — scroll interno">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+    <span>Editorial</span>
+  </button>
+
+  <!-- Páginas independientes -->
+  <button class="nav-btn" id="nav-intercambios"
+          data-type="page"
+          onclick="goPage('p-intercambios')"
+          title="Intercambios — página independiente">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"/>
+      <line x1="2" y1="12" x2="22" y2="12"/>
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+    </svg>
+    <span>Intercambio</span>
+  </button>
+
+  <button class="nav-btn" id="nav-sabias"
+          data-type="page"
+          onclick="goPage('p-sabias')"
+          title="¿Sabías? — página independiente">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <circle cx="12" cy="12" r="10"/>
+      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+      <line x1="12" y1="17" x2="12.01" y2="17"/>
+    </svg>
+    <span>¿Sabías?</span>
+  </button>
+
+  <button class="nav-btn" id="nav-trivia"
+          data-type="page"
+          onclick="goPage('p-trivia')"
+          title="Trivia — página independiente">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+    </svg>
+    <span>Trivia</span>
+  </button>
+
+  <button class="nav-btn" id="nav-galeria"
+          data-type="page"
+          onclick="goPage('p-galeria')"
+          title="Campus — página independiente">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <rect x="3" y="3" width="18" height="18" rx="2"/>
+      <circle cx="8.5" cy="8.5" r="1.5"/>
+      <polyline points="21 15 16 10 5 21"/>
+    </svg>
+    <span>Campus</span>
+  </button>
+
+</nav>
+
+<script>
+// ──────────────────────────────────────────────────
+// PÁGINAS INDEPENDIENTES
+// ──────────────────────────────────────────────────
+const PAGES = ['p-inicio','p-intercambios','p-sabias','p-trivia','p-galeria'];
+
+// Qué botón(es) del nav se activan según la página visible
+const NAV_PAGE_MAP = {
+  'nav-inicio':       'p-inicio',
+  'nav-editorial':    'p-inicio',
+  'nav-intercambios': 'p-intercambios',
+  'nav-sabias':       'p-sabias',
+  'nav-trivia':       'p-trivia',
+  'nav-galeria':      'p-galeria'
+};
+
+function setNavActive(navId) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(navId).classList.add('active');
+}
+
+// Mostrar página independiente y resetear scroll
+function goPage(id) {
+  PAGES.forEach(p => document.getElementById(p).classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+
+  // Activar el botón del nav correspondiente
+  const navId = Object.keys(NAV_PAGE_MAP).find(k => NAV_PAGE_MAP[k] === id && k !== 'nav-editorial');
+  if (navId) setNavActive(navId);
+}
+
+// ──────────────────────────────────────────────────
+// NAVEGACIÓN DE SCROLL INTERNO (Inicio / Editorial)
+// ──────────────────────────────────────────────────
+
+// Botón "Inicio" del nav → muestra p-inicio y hace scroll al banner
+function goInicio() {
+  if (!document.getElementById('p-inicio').classList.contains('active')) {
+    goPage('p-inicio');
+  }
+  setNavActive('nav-inicio');
+  requestAnimationFrame(() => {
+    document.getElementById('banner-inicio').scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// Botón "Editorial" del nav → muestra p-inicio y hace scroll a la sección editorial
+function goEditorial() {
+  if (!document.getElementById('p-inicio').classList.contains('active')) {
+    goPage('p-inicio');
+  }
+  setNavActive('nav-editorial');
+  setTimeout(() => {
+    document.getElementById('seccion-editorial').scrollIntoView({ behavior: 'smooth' });
+  }, 50);
+}
+
+// Botón interno "LEER EDITORIAL ↓" dentro del banner
+function scrollToEditorial() {
+  setNavActive('nav-editorial');
+  document.getElementById('seccion-editorial').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Botón interno "↺ Volver al inicio" desde Campus
+function scrollToInicio() {
+  goPage('p-inicio');
+  setNavActive('nav-inicio');
+  requestAnimationFrame(() => {
+    document.getElementById('banner-inicio').scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// Actualizar el nav al hacer scroll dentro de p-inicio
+window.addEventListener('scroll', () => {
+  if (!document.getElementById('p-inicio').classList.contains('active')) return;
+  const editTop = document.getElementById('seccion-editorial').getBoundingClientRect().top;
+  const isEdit = editTop < window.innerHeight * 0.5;
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(isEdit ? 'nav-editorial' : 'nav-inicio').classList.add('active');
+}, { passive: true });
+
+// ──────────────────────────────────────────────────
+// TRIVIA
+// ──────────────────────────────────────────────────
+const QUESTIONS = [
+  { q:"¿En qué año fue lanzado Adobe Photoshop por primera vez?", opts:["1984","1988","1991","1995"], ans:1, exp:"Photoshop fue creado por Thomas y John Knoll y lanzado en febrero de 1988. Adobe lo adquirió y lo comercializó en 1990." },
+  { q:"¿Quién diseñó el logotipo de IBM, UPS y muchas otras marcas icónicas?", opts:["Saul Bass","Milton Glaser","Paul Rand","Massimo Vignelli"], ans:2, exp:"Paul Rand es el autor de logos icónicos como IBM, UPS, ABC y Enron." },
+  { q:"¿Cuál es el jugador real representado en el logo de la NBA?", opts:["Michael Jordan","Kareem Abdul-Jabbar","Jerry West","Magic Johnson"], ans:2, exp:"La silueta del logo de la NBA representa a Jerry West, apodado 'The Logo', en una fotografía de 1969." },
+  { q:"¿Cuánto costó el logotipo más caro de la historia (Symantec)?", opts:["$40 millones","$200 millones","$690 millones","$1,280 millones"], ans:3, exp:"El logo de Symantec/Verisign se considera el más caro, con un valor estimado de $1,280 millones de dólares." },
+  { q:"¿Qué tipografía usa Woody Allen en TODAS sus películas?", opts:["Helvetica","Garamond","Windsor","Times New Roman"], ans:2, exp:"Woody Allen usa exclusivamente la tipografía Windsor en sus créditos, desde 'Annie Hall' (1977)." },
+  { q:"¿Por qué el logotipo de Coca-Cola no fue creado con una tipografía?", opts:["Porque no existían tipografías en esa época","Fue escrito en Spencerian Script, un estilo de escritura","Fue dibujado a mano sin referencia de texto","Porque el fundador era calígrafo"], ans:1, exp:"El logo de Coca-Cola fue creado en Spencerian Script, un estilo caligráfico muy popular en el siglo XIX en EUA." },
+  { q:"¿Cuándo se celebra el Día Internacional del Diseño Gráfico?", opts:["15 de enero","27 de abril","5 de junio","1 de octubre"], ans:1, exp:"El 27 de abril es el Día Internacional del Diseño Gráfico, establecido por la ICOGRADA." },
+  { q:"La primera empresa dedicada al diseño gráfico fue fundada en 1891 por:", opts:["Charles Morris","William Morris","Herbert Bayer","Jan Tschichold"], ans:1, exp:"William Morris creó la Kelmscott Press en 1891, considerada la primera empresa dedicada al diseño y maquetación de libros." }
+];
+
+let currentQ = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let score = 0;
+
+function initTrivia() {
+  const prog = document.getElementById('trivia-progress');
+  prog.innerHTML = '';
+  QUESTIONS.forEach((_,i) => {
+    const d = document.createElement('div');
+    d.className = 'tp-dot'; d.id = 'dot-'+i;
+    prog.appendChild(d);
+  });
+  renderQ();
+}
+
+function renderQ() {
+  const q = QUESTIONS[currentQ];
+  document.getElementById('q-num').textContent = `PREGUNTA ${currentQ+1} / ${QUESTIONS.length}`;
+  document.getElementById('q-text').textContent = q.q;
+  const opts = document.getElementById('q-opts');
+  opts.innerHTML = '';
+  q.opts.forEach((opt,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'q-opt';
+    btn.textContent = String.fromCharCode(65+i) + '. ' + opt;
+    btn.onclick = () => selectAnswer(i);
+    if (answers[currentQ] !== null) {
+      if (i === q.ans) btn.classList.add('correct');
+      else if (i === answers[currentQ]) btn.classList.add('wrong');
+      btn.disabled = true;
+    }
+    opts.appendChild(btn);
+  });
+  const fb = document.getElementById('q-feedback');
+  if (answers[currentQ] !== null) {
+    fb.textContent = (answers[currentQ] === q.ans ? '✅ ¡Correcto! ' : '❌ Incorrecto. ') + q.exp;
+    fb.classList.add('visible');
+  } else { fb.classList.remove('visible'); fb.textContent = ''; }
+  document.getElementById('prev-q').disabled = currentQ === 0;
+  document.getElementById('next-q').disabled = currentQ === QUESTIONS.length - 1;
+  updateScore();
+}
+
+function selectAnswer(i) {
+  if (answers[currentQ] !== null) return;
+  answers[currentQ] = i;
+  if (i === QUESTIONS[currentQ].ans) score++;
+  document.getElementById('dot-'+currentQ).classList.add('done');
+  renderQ();
+}
+
+function nextQ() { if (currentQ < QUESTIONS.length-1) { currentQ++; renderQ(); } }
+function prevQ() { if (currentQ > 0) { currentQ--; renderQ(); } }
+function updateScore() {
+  const answered = answers.filter(a => a !== null).length;
+  document.getElementById('score-display').textContent = `${score} / ${answered}`;
+}
+
+// ── Lightbox ──
+function openLB(src) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+
+window.addEventListener('DOMContentLoaded', initTrivia);
+
+// ──────────────────────────────────────────────────
+// GATO FLOTANTE — DRAG (mouse + touch)
+// ──────────────────────────────────────────────────
+(function() {
+  const el = document.getElementById("floatImg");
+  let isDragging = false;
+  let startX, startY, origLeft, origTop;
+  // Posición inicial: escondido abajo a la derecha (se maneja por CSS)
+  // Una vez arrastrado, usamos left/top fijos
+  let hasMoved = false;
+
+  function getPos() {
+    const rect = el.getBoundingClientRect();
+    return { left: rect.left, top: rect.top };
+  }
+
+  function startDrag(clientX, clientY) {
+    isDragging = true;
+    el.classList.add("dragging");
+    startX = clientX;
+    startY = clientY;
+
+    if (!hasMoved) {
+      // Primera vez: convertimos la posición CSS (right/bottom) a left/top absolutos
+      const rect = el.getBoundingClientRect();
+      el.style.left = rect.left + "px";
+      el.style.top  = rect.top  + "px";
+      el.style.right  = "auto";
+      el.style.bottom = "auto";
+      hasMoved = true;
+    }
+
+    origLeft = parseFloat(el.style.left) || 0;
+    origTop  = parseFloat(el.style.top)  || 0;
+  }
+
+  function moveDrag(clientX, clientY) {
+    if (!isDragging) return;
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+    el.style.left = (origLeft + dx) + "px";
+    el.style.top  = (origTop  + dy) + "px";
+  }
+
+  function endDrag() {
+    if (!isDragging) return;
+    isDragging = false;
+    el.classList.remove("dragging");
+  }
+
+  // Mouse
+  el.addEventListener("mousedown", e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
+  window.addEventListener("mousemove", e => moveDrag(e.clientX, e.clientY));
+  window.addEventListener("mouseup",   endDrag);
+
+  // Touch
+  el.addEventListener("touchstart", e => {
+    const t = e.touches[0];
+    startDrag(t.clientX, t.clientY);
+  }, { passive: true });
+  window.addEventListener("touchmove", e => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const t = e.touches[0];
+    moveDrag(t.clientX, t.clientY);
+  }, { passive: false });
+  window.addEventListener("touchend", endDrag);
+})();
+</script>
+
+</body>
+</html>
