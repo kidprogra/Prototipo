@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yahir Monrreal — Diseño Gráfico 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="CSS/style.css">
+</head>
+<body>
+ 
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">YM<span>.</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#sobre-mi">Sobre mí</a></li>
+    <li><a href="#proyectos">Proyectos</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+ 
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg-text">YM</div>
+ 
+  <div class="hero-left">
+    <div class="hero-tag">Portafolio 2026</div>
+    <h1 class="hero-name">YAHIR<br><span>MONRREAL</span></h1>
+    <p class="hero-sub">Estudiante de <strong style="color:var(--pink)">Diseño Gráfico</strong> · UAT Tamaulipas · Apasionado por la publicidad digital, el branding y el diseño web.</p>
+    <div class="hero-cta">
+      <a href="#proyectos" class="btn-primary">Ver proyectos</a>
+      <a href="#contacto" class="btn-outline">Contáctame</a>
+    </div>
+  </div>
+ 
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="hero-card-label">Proyectos realizados</div>
+      <div class="hero-card-val">05+</div>
+      <div class="hero-card-desc">Desde señalética hasta páginas web completas</div>
+    </div>
+    <div class="hero-skills-pill">
+      <span class="pill">Branding</span>
+      <span class="pill alt">Diseño Web</span>
+      <span class="pill alt2">Editorial</span>
+      <span class="pill">Multimedia</span>
+      <span class="pill alt">Señalética</span>
+      <span class="pill alt2">Publicidad Digital</span>
+    </div>
+  </div>
+</section>
+ 
+<!-- SOBRE MÍ -->
+<section id="sobre-mi">
+  <div class="reveal">
+    <div class="section-label">Quién soy</div>
+    <h2 class="section-title">¡HOLA,<br>SOY YAHIR!</h2>
+    <img src="lib/perfil.jpeg" class="perfil-img" alt="Foto de Yahir">
+    <p class="about-body">
+      Soy estudiante de Diseño Gráfico en la <strong>Universidad Autónoma de Tamaulipas</strong> — Facultad de Arquitectura, Diseño y Urbanismo. Me considero una persona <strong>creativa, curiosa</strong> y con muchas ganas de seguir aprendiendo algo nuevo cada día.<br><br>
+      Me encanta salir de mi zona de confort y enfrentar proyectos variados — desde señalética hasta páginas web completas. <strong>¡Cada proyecto es una nueva aventura!</strong>
+    </p>
+    <div class="about-info-grid">
+      <div class="about-info-item">
+        <div class="about-info-label">Ubicación</div>
+        <div class="about-info-val">Tamaulipas, México</div>
+      </div>
+      <div class="about-info-item">
+        <div class="about-info-label">Teléfono</div>
+        <div class="about-info-val">+52 833 428 8574</div>
+      </div>
+      <div class="about-info-item">
+        <div class="about-info-label">Email</div>
+        <div class="about-info-val" style="font-size:0.8rem">guillermomonrreal18@gmail.com</div>
+      </div>
+      <div class="about-info-item">
+        <div class="about-info-label">Estado</div>
+        <div class="about-info-val" style="color:var(--orange)">Disponible ✓</div>
+      </div>
+    </div>
+  </div>
+ 
+  <div class="software-block reveal" style="transition-delay:0.15s">
+    <div class="software-title">SOFTWARES</div>
+    <div class="sw-wrap">
+  <div class="sw-bar" id="swBar">
+    <div class="sw-pill" id="swPill"></div>
+ 
+    <button class="sw-btn featured active" data-name="Affinity Suite" data-pct="30" data-level="En aprendizaje" data-color="#1de78e" data-text="#0a3d24" style="font-size:20px;">afi</button>
+    <div class="sw-sep"></div>
+    <button class="sw-btn" data-name="Photoshop"      data-pct="82" data-level="Avanzado"        data-color="#31a8ff" data-text="#fff">Ps</button>
+    <button class="sw-btn" data-name="Illustrator"    data-pct="78" data-level="Avanzado"        data-color="#ff9a00" data-text="#fff">Ai</button>
+    <button class="sw-btn" data-name="Premiere Pro"   data-pct="65" data-level="Intermedio"      data-color="#9999ff" data-text="#fff">Pr</button>
+    <button class="sw-btn" data-name="DaVinci Resolve" data-pct="15" data-level="En aprendizaje"     data-color="#e07540" data-text="#fff">Dr</button>
+    <button class="sw-btn" data-name="Blender"        data-pct="38" data-level="Básico"          data-color="#ea7600" data-text="#fff">Bl</button>
+    <button class="sw-btn" data-name="InDesign"       data-pct="70" data-level="Intermedio"      data-color="#ff3366" data-text="#fff">Id</button>
+    <button class="sw-btn" data-name="Lightroom"      data-pct="60" data-level="Intermedio"      data-color="#5fc8ff" data-text="#fff">Lr</button>
+    <button class="sw-btn" data-name="Krita Studio"      data-pct="50" data-level="Intermedio"      data-color="#E4095E" data-text="#fff">Kr</button>
+    <button class="sw-btn" data-name="VS Code"      data-pct="69" data-level="Intermedio"      data-color="#5AE1FE" data-text="#fff">Html</button>
+  </div>
+
+</div>
+    <div class="edu-block">
+      <div class="section-label" style="color:var(--orange);margin-bottom:0.5rem">Educación</div>
+      <div class="edu-entry">
+        <div class="edu-year">2022 — Presente</div>
+        <div class="edu-name">Universidad Autónoma de Tamaulipas</div>
+        <div class="edu-detail">Facultad de Arquitectura, Diseño y Urbanismo<br>Licenciatura en Diseño Gráfico · Actualmente cursando</div>
+      </div>
+      <div class="edu-entry">
+        <div class="edu-year">2018 — 2021</div>
+        <div class="edu-name">Centro de Bachillerato Tecnológico, Indsutrial y de Servicios No. 103</div>
+        <div class="edu-detail">Carrera - Licenciatura en Programación</div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- PROYECTOS -->
+<section id="proyectos">
+  <div class="projects-header reveal">
+    <div>
+      <div class="section-label">Mi trabajo</div>
+      <h2 class="section-title" style="color:var(--dark)">PROYECTOS<br>DESTACADOS</h2>
+    </div>
+    <div class="projects-count">06</div>
+  </div>
+ 
+  <div class="projects-grid">
+ 
+    <!-- 01 Editorial AVON -->
+    <a href="proyecto_01.html" class="project-card reveal" style="transition-delay:0s">
+      <div class="project-card-header bg-gradient-1">
+        <div class="project-card-num">01</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Editorial</div>
+        <div class="project-card-title">Catálogo AVON</div>
+        <div class="project-card-desc">Catálogo inspirado en la identidad visual de AVON, creado como proyecto escolar.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Photoshop</span>
+          <span class="tool-tag">Illustrator</span>
+          <span class="tool-tag">InDesign</span>
+        </div>
+      </div>
+    </a>
+ 
+    <!-- 02 Revista Ecológica -->
+    <a href="proyecto_02.html" class="project-card reveal" style="transition-delay:0.08s">
+      <div class="project-card-header bg-gradient-3">
+        <div class="project-card-num">02</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Editorial</div>
+        <div class="project-card-title">Revista Ecológica</div>
+        <div class="project-card-desc">Revista para promover los ODS de la ONU, Agenda 2030. Diseño en equipo con enfoque ecológico.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Photoshop</span>
+          <span class="tool-tag">Illustrator</span>
+          <span class="tool-tag">InDesign</span>
+        </div>
+      </div>
+    </a>
+ 
+    <!-- 03 Diseño Web - Revista FADU -->
+    <a href="proyecto_03.html" class="project-card reveal" style="transition-delay:0.16s">
+      <div class="project-card-header bg-gradient-2">
+        <div class="project-card-num">03</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Diseño Web</div>
+        <div class="project-card-title">Página tipo Revista</div>
+        <div class="project-card-desc">Sitio web diseñado como revista editorial para la FADU-UAT, Tampico.</div>
+        <div class="project-tools">
+          <span class="tool-tag">HTML/CSS</span>
+          <span class="tool-tag">Web Design</span>
+        </div>
+      </div>
+    </a>
+ 
+    <!-- 04 Landing Page SKY -->
+    <a href="proyecto_04.html" class="project-card reveal" style="transition-delay:0s">
+      <div class="project-card-header bg-gradient-4">
+        <div class="project-card-num">04</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Diseño Web</div>
+        <div class="project-card-title">Landing Page — SKY</div>
+        <div class="project-card-desc">Landing page del juego SKY: Children of the Sky. Galería, navegación y datos del juego.</div>
+        <div class="project-tools">
+          <span class="tool-tag">HTML/CSS</span>
+          <span class="tool-tag">UI/UX</span>
+        </div>
+      </div>
+    </a>
+ 
+    <!-- 05 Uniformes -->
+    <a href="proyecto_05.html" class="project-card reveal" style="transition-delay:0.08s">
+      <div class="project-card-header bg-gradient-5">
+        <div class="project-card-num">05</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Identidad Visual</div>
+        <div class="project-card-title">Instituto Cultural Tampico</div>
+        <div class="project-card-desc">Este proyecto fue como colaborador, se trata de unos uniformes para talleres extracurriculares con diferenciadores gráficos por disciplina.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Illustrator</span>
+          <span class="tool-tag">Uniformes</span>
+        </div>
+      </div>
+    </a>
+ 
+    <!-- 06 Croquis -->
+    <a href="proyecto_06.html" class="project-card reveal" style="transition-delay:0.16s">
+      <div class="project-card-header bg-gradient-6">
+        <div class="project-card-num">06</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Identidad Visual · Señalética</div>
+        <div class="project-card-title">Croquis Isométrico</div>
+        <div class="project-card-desc">Este proyecto fue como colaborar se trata de un croquis isométrico del campus completo con edificio modular e interior visible.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Illustrator</span>
+          <span class="tool-tag">Maquetación</span>
+          <span class="tool-tag">Señalética</span>
+        </div>
+      </div>
+    </a>
+    <!-- 05 Uniformes -->
+    <a href="proyecto_05.html" class="project-card reveal" style="transition-delay:0.08s">
+      <div class="project-card-header bg-gradient-5">
+        <div class="project-card-num">07</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Edición de Video</div>
+        <div class="project-card-title"> </div>
+        <div class="project-card-desc">Este proyecto fue como colaborador, se trata de unos uniformes para talleres extracurriculares con diferenciadores gráficos por disciplina.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Illustrator</span>
+          <span class="tool-tag">Uniformes</span>
+        </div>
+      </div>
+    </a>
+ 
+    <!-- 06 Croquis -->
+    <a href="proyecto_06.html" class="project-card reveal" style="transition-delay:0.16s">
+      <div class="project-card-header bg-gradient-6">
+        <div class="project-card-num">08</div>
+        <div class="project-card-hover-icon">Ver proyecto →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Identidad Visual · Señalética</div>
+        <div class="project-card-title">Croquis Isométrico</div>
+        <div class="project-card-desc">Este proyecto fue como colaborar se trata de un croquis isométrico del campus completo con edificio modular e interior visible.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Illustrator</span>
+          <span class="tool-tag">Maquetación</span>
+          <span class="tool-tag">Señalética</span>
+        </div>
+      </div>
+    </a>
+ <!-- 07 Integrador -->
+    <a class="project-card reveal" style="transition-delay:0.16s">
+      <div class="project-card-header bg-gradient-7">
+        <div class="project-card-num">09</div>
+        <div class="project-card-hover-icon">Proximamente →</div>
+      </div>
+      <div class="project-card-body">
+        <div class="project-card-cat">Emprendimiento</div>
+        <div class="project-card-title">MAPY Studio</div>
+        <div class="project-card-desc">Este proyecto es un Emprendimiento de branding interactivo, donde las marcas se llevan a un nuevo nivel de relación con el usuario.</div>
+        <div class="project-tools">
+          <span class="tool-tag">Affinityr</span>
+          <span class="tool-tag">Iluustrator</span>
+          <span class="tool-tag">Proyecto Integrador</span>
+        </div>
+      </div>
+    </a>
+  </div>
+</section>
+ 
+<!-- CONTACTO -->
+<section id="contacto">
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <div class="section-label">Hablemos</div>
+      <h2 class="section-title">TRABAJEMOS<br>JUNTOS</h2>
+      <p class="contact-desc">¿Tienes un proyecto en mente? Estoy disponible para colaboraciones, proyectos escolares y trabajo freelance. ¡No dudes en escribirme!</p>
+      <a href="https://wa.me/528334288574?text=Hola%20Yahir%2C%20me%20interesa%20tu%20trabajo" 
+      target="_blank" 
+      class="contact-link">
+      <div class="contact-link-icon">
+        <img src="https://imgs.search.brave.com/dYraZt_E_o57gln2Ja51FDtgg5LrVtISvUufe_qEmPQ/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9zdGF0/aWMudmVjdGVlenku/Y29tL3N5c3RlbS9y/ZXNvdXJjZXMvdGh1/bWJuYWlscy8wMjMv/OTg2LzU1Ny9zbWFs/bC93aGF0c2FwcC1s/b2dvLXdoYXRzYXBw/LWxvZ28tdHJhbnNw/YXJlbnQtd2hhdHNh/cHAtaWNvbi10cmFu/c3BhcmVudC1mcmVl/LWZyZWUtcG5nLnBu/Zw">
+      </div>
+        Whatsapp
+      </a>
+      <a href="https://ig.me/m/empty_sl.21" 
+   target="_blank" 
+   class="contact-link">
+  <div class="contact-link-icon">
+    <img src="https://imgs.search.brave.com/5xGLN1hcdrxkoV4_0risW3bvRFthz6OxSv59AGQx5V4/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/aWNvbnNjb3V0LmNv/bS9pY29uL2ZyZWUv/cG5nLTI1Ni9mcmVl/LWluc3RhZ3JhbS1s/b2dvLWljb24tc3Zn/LWRvd25sb2FkLXBu/Zy0zMjAxNTU0LnBu/Zz9mPXdlYnAmdz0x/Mjg">
+  </div>
+  Instagram
+</a>
+      <a href="#" class="contact-link">
+        <div class="contact-link-icon">📍</div>
+        Tamaulipas, México
+      </a>
+    </div>
+ 
+    <div class="reveal" style="transition-delay:0.15s">
+      <form class="contact-form" id="contactForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="nombre">Nombre</label>
+            <input class="form-input" type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" type="email" id="email" name="email" placeholder="tu@email.com" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="servicio">Tipo de proyecto</label>
+          <select class="form-select" id="servicio" name="servicio" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option value="editorial">Diseño Editorial</option>
+            <option value="web">Diseño Web</option>
+            <option value="branding">Branding / Identidad</option>
+            <option value="senal">Señalética</option>
+            <option value="multimedia">Multimedia</option>
+            <option value="otro">Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="mensaje">Mensaje</label>
+          <textarea class="form-textarea" id="mensaje" name="mensaje" placeholder="Cuéntame sobre tu proyecto..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">Enviar mensaje →</button>
+      </form>
+ 
+      <div class="form-success" id="formSuccess">
+        <h3>¡MENSAJE ENVIADO!</h3>
+        <p>Muchas gracias por contactarme. Te responderé lo antes posible 🙌</p>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">YAHIR<span>M</span></div>
+  <div class="footer-copy">© 2026 Yahir Monrreal · Diseño Gráfico · UAT Tamaulipas</div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  // SCROLL REVEAL
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+ 
+  const bar   = document.getElementById('swBar');
+  const pill  = document.getElementById('swPill');
+  const btns  = Array.from(bar.querySelectorAll('.sw-btn'));
+  let active  = btns[0];
+  let popup   = null;
+ 
+  function movePill(btn) {
+    const barRect = bar.getBoundingClientRect();
+    const btnRect = btn.getBoundingClientRect();
+    pill.style.left   = (btnRect.left - barRect.left) + 'px';
+    pill.style.width  = btnRect.width + 'px';
+    pill.style.background = btn.dataset.color;
+  }
+ 
+  function showPopup(btn) {
+    if (popup) { popup.classList.remove('show'); popup.remove(); popup = null; }
+
+    const p = document.createElement('div');
+    p.className = 'sw-popup';
+    p.innerHTML = `
+      <div class="pop-name">${btn.dataset.name}</div>
+      <div class="pop-bar-wrap"><div class="pop-bar-fill" style="background:${btn.dataset.color}"></div></div>
+      <div class="pop-pct">${btn.dataset.pct}%</div>
+      <div class="pop-level">${btn.dataset.level}</div>
+    `;
+    // Usamos fixed para que no se corte por el overflow del contenedor
+    p.style.position = 'fixed';
+    document.body.appendChild(p);
+    popup = p;
+
+    // Posicionar encima del botón
+    function positionPopup() {
+      const rect = btn.getBoundingClientRect();
+      const pw = p.offsetWidth || 160;
+      let left = rect.left + rect.width / 2 - pw / 2;
+      // Que no se salga por los bordes
+      left = Math.max(8, Math.min(left, window.innerWidth - pw - 8));
+      p.style.left = left + 'px';
+      p.style.top = (rect.top - p.offsetHeight - 16) + 'px';
+    }
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        positionPopup();
+        p.classList.add('show');
+        p.querySelector('.pop-bar-fill').style.width = btn.dataset.pct + '%';
+      });
+    });
+  }
+ 
+  function activate(btn) {
+    btns.forEach(b => {
+      b.classList.remove('active');
+      b.style.color = '';
+    });
+    btn.classList.add('active');
+    btn.style.color = btn.dataset.text || '#fff';
+    movePill(btn);
+    showPopup(btn);
+    active = btn;
+  }
+ 
+  btns.forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      if (active === btn && popup) {
+        popup.classList.remove('show');
+        setTimeout(() => { if(popup) { popup.remove(); popup = null; } }, 220);
+        return;
+      }
+      activate(btn);
+    });
+  });
+ 
+  document.addEventListener('click', () => {
+    if (popup) { popup.classList.remove('show'); setTimeout(() => { if(popup){popup.remove();popup=null;} }, 220); }
+  });
+ 
+  requestAnimationFrame(() => { movePill(active); active.style.color = active.dataset.text || '#fff'; });
+  
+ 
+  // HAMBURGER MENU
+  const hamburger = document.getElementById('hamburger');
+  const navLinks  = document.getElementById('navLinks');
+
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navLinks.classList.toggle('mobile-open');
+    document.body.style.overflow = navLinks.classList.contains('mobile-open') ? 'hidden' : '';
+  });
+
+  navLinks.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navLinks.classList.remove('mobile-open');
+      document.body.style.overflow = '';
+    });
+  });
+
+ emailjs.init('NdBmmbM8C2C3LFF7K');
+ 
+  const form = document.getElementById('contactForm');
+  const successMsg = document.getElementById('formSuccess');
+ 
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+ 
+    const btn = form.querySelector('.form-submit');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+ 
+    const params = {
+      from_name:  document.getElementById('nombre').value,
+      from_email: document.getElementById('email').value,
+      subject:    document.getElementById('servicio').value,
+      message:    document.getElementById('mensaje').value,
+    };
+ 
+   emailjs.send('service_rhsr3cw', 'template_bvhhbsf', params)
+  .then(() => {
+    // Oculta form y muestra success
+    form.style.display = 'none';
+    successMsg.style.display = 'block';
+ 
+    form.reset();
+ 
+    // ⏳ Espera 10 segundos y regresa al form
+    setTimeout(() => {
+      successMsg.style.display = 'none';
+      form.style.display = 'block';
+ 
+      // Reset botón
+      const btn = form.querySelector('.form-submit');
+      btn.textContent = 'Enviar mensaje →';
+      btn.disabled = false;
+ 
+    }, 5000);
+  })
+  .catch((err) => {
+    console.error('Error EmailJS:', err);
+    btn.textContent = 'Error al enviar';
+    btn.disabled = false;
+  });
+  });
+  
+</script>
+</body>
+</html>
